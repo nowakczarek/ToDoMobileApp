@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ToDoApp.MainPage">
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+            <Image Source="img1.png" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Start"
+                   HeightRequest="200" 
+                   Aspect="AspectFit"/>
+            <!-- Section for Adding ToDo Items -->
+            <StackLayout Orientation="Vertical" Spacing="10">
+                <Entry x:Name="ToDoContentEntry" Placeholder="Enter Task" Text="{Binding ToDoContent}"/>
+                <DatePicker x:Name="DueDatePicker" Date="{Binding DueDate}"/>
+                <Button Text="Add Task" Command="{Binding OnAddToDoItemCommand}"/>
+            </StackLayout>
+
+            <!-- Lists for Items by Status -->
+            <Label Text="To Do" FontAttributes="Bold" />
+            <CollectionView x:Name="ToDoListView" ItemsSource="{Binding ToDoItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,0,0,5">
+                            <Label Text="{Binding ToDoContent}" VerticalOptions="Center" />
+                            <Label Text="{Binding DueTo, StringFormat='Due: {0:MM/dd/yyyy}'}" VerticalOptions="Center" />
+                            <Button Text="Start" Command="{Binding BindingContext.ChangeStatusCommand, Source={x:Reference ToDoListView}}" CommandParameter="{Binding}" />
+                            <Button Text="Delete" Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference ToDoListView}}" CommandParameter="{Binding}" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="In Progress" FontAttributes="Bold" />
+            <CollectionView x:Name="InProgressListView" ItemsSource="{Binding InProgressItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,0,0,5">
+                            <Label Text="{Binding ToDoContent}" VerticalOptions="Center"/>
+                            <Label Text="{Binding DueTo, StringFormat='Due: {0:MM/dd/yyyy}'}" VerticalOptions="Center" />
+                            <Button Text="Complete" Command="{Binding BindingContext.ChangeStatusCommand, Source={x:Reference InProgressListView}}" CommandParameter="{Binding}" />
+                            <Button Text="Delete" Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference InProgressListView}}" CommandParameter="{Binding}" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="Done" FontAttributes="Bold" />
+            <CollectionView x:Name="DoneListView" ItemsSource="{Binding DoneItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,0,0,5">
+                            <Label Text="{Binding ToDoContent}" VerticalOptions="Center"/>
+                            <Label Text="{Binding DueTo, StringFormat='Due: {0:MM/dd/yyyy}'}" VerticalOptions="Center"/>
+                            <Image Source="done.png"
+                                   WidthRequest="40"
+                                   VerticalOptions="Center"
+                                   Aspect="Fill" />
+                            <Button Text="Delete" Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference DoneListView}}" CommandParameter="{Binding}" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
